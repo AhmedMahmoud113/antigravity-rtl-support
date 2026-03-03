@@ -217,7 +217,7 @@ const CONTENT_SCRIPT = `
   window.__rtlFixApplied = true;
 
   var ARABIC_RE = new RegExp('[\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF]');
-  var TEXT_TAGS = 'p,li,h1,h2,h3,h4,h5,h6,blockquote,summary,details,td,th';
+  var TEXT_TAGS = 'p,li,h1,h2,h3,h4,h5,h6,blockquote,summary,details,td,th,div,span';
 
   function fixElement(el) {
     if (el.tagName === 'PRE' || el.tagName === 'CODE') return;
