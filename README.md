@@ -2,7 +2,7 @@
 
 # 🔧 Antigravity RTL Fix
 
-**Fix Arabic & Hebrew (RTL) text rendering in Google Antigravity's chat panel and Markdown Preview.**
+**Fix Arabic (RTL) text rendering in Google Antigravity's chat panel and Markdown Preview.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)]()
@@ -13,7 +13,7 @@
 
 ## The Problem
 
-Google Antigravity renders Arabic, Hebrew, and other RTL (Right-to-Left) text incorrectly in its chat panel. When you communicate with an AI assistant in Arabic, the text direction gets mixed up — sentences appear reversed, mixed Arabic/English content becomes unreadable, and bullet points are misaligned.
+Google Antigravity renders Arabic and other RTL (Right-to-Left) text incorrectly in its chat panel. When you communicate with an AI assistant in Arabic, the text direction gets mixed up — sentences appear reversed, mixed Arabic/English content becomes unreadable, and bullet points are misaligned.
 
 **Before:**
 
@@ -114,7 +114,7 @@ The injected CSS uses scoped selectors (`.interactive-session`, `.vscode-body`, 
 Contributions are welcome! Feel free to:
 
 - Report issues with specific text rendering
-- Add support for additional RTL languages (Hebrew, Persian, Urdu)
+- Add support for additional RTL languages (Persian, Urdu)
 - Improve CSS selectors for edge cases
 - Add screenshots showing before/after
 

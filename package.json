@@ -1,7 +1,7 @@
 {
   "name": "antigravity-rtl-support",
   "version": "1.0.0",
-  "description": "Fix Arabic & Hebrew (RTL) text rendering in Google Antigravity's chat panel and Markdown Preview",
+  "description": "Fix Arabic (RTL) text rendering in Google Antigravity's chat panel and Markdown Preview",
   "main": "install.js",
   "scripts": {
     "install-fix": "node install.js",
@@ -15,7 +15,6 @@
     "rtl-support",
     "arabic",
     "arabic-text",
-    "hebrew",
     "bidi",
     "bidirectional",
     "right-to-left",
