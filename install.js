@@ -219,31 +219,54 @@ const CONTENT_SCRIPT = `
   var ARABIC_RE = new RegExp('[\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF]');
   var TEXT_TAGS = 'p,li,h1,h2,h3,h4,h5,h6,blockquote,summary,details,td,th';
 
-  function fixElement(el) {
-    if (el.tagName === 'PRE' || el.tagName === 'CODE') return;
-    if (el.closest && el.closest('pre')) return;
+  function getDirectText(el) {
+    var text = '';
+    el.childNodes.forEach(function(n) {
+      if (n.nodeType === 3) text += n.textContent;
+    });
+    return text;
+  }
 
+  function getAllText(el) {
     var text = '';
     el.childNodes.forEach(function(n) {
       if (n.nodeType === 3) text += n.textContent;
       else if (n.tagName !== 'CODE') text += n.textContent || '';
     });
+    return text;
+  }
 
-    if (ARABIC_RE.test(text)) {
-      el.setAttribute('dir', 'rtl');
-      el.style.textAlign = 'right';
-      if ((el.tagName === 'LI') && el.parentElement) {
-        el.parentElement.setAttribute('dir', 'rtl');
-      }
+  function applyRtl(el) {
+    el.setAttribute('dir', 'rtl');
+    el.style.textAlign = 'right';
+    if ((el.tagName === 'LI') && el.parentElement) {
+      el.parentElement.setAttribute('dir', 'rtl');
     }
+  }
+
+  function fixElement(el) {
+    if (el.tagName === 'PRE' || el.tagName === 'CODE') return;
+    if (el.closest && el.closest('pre')) return;
+    if (el.getAttribute('dir') === 'rtl') return;
+    if (ARABIC_RE.test(getAllText(el))) applyRtl(el);
+  }
+
+  // For divs: only apply RTL if the div ITSELF has direct Arabic text
+  // (not just from deeply nested children)
+  function fixDiv(el) {
+    if (el.tagName === 'PRE' || el.tagName === 'CODE') return;
+    if (el.closest && el.closest('pre')) return;
+    if (el.getAttribute('dir') === 'rtl') return;
+    // Only check direct text nodes — not nested element text
+    if (ARABIC_RE.test(getDirectText(el))) applyRtl(el);
   }
 
   function fixAll() {
     document.querySelectorAll(TEXT_TAGS).forEach(fixElement);
-    // Scan divs/spans ONLY inside chat panel (user messages use div, not p)
+    // Scan divs/spans ONLY inside chat panel, with strict direct-text check
     var chatArea = document.querySelector('.interactive-session');
     if (chatArea) {
-      chatArea.querySelectorAll('div,span').forEach(fixElement);
+      chatArea.querySelectorAll('div,span').forEach(fixDiv);
     }
   }
 
