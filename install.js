@@ -208,11 +208,10 @@ td[dir="rtl"], th[dir="rtl"] { text-align: right; }
 .interactive-input-editor .view-lines {
   unicode-bidi: plaintext;
 }
-/* User's sent messages — auto-detect direction from text content */
-.interactive-session .interactive-request,
-.interactive-session .interactive-request *:not(pre):not(code):not(.monaco-editor):not(.monaco-editor *) {
+/* ALL webview content — auto-detect direction from text */
+/* Main window unaffected (has .monaco-workbench on body) */
+body:not(.monaco-workbench) *:not(pre):not(code) {
   unicode-bidi: plaintext;
-  text-align: start;
 }
 `;
 
