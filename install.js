@@ -240,16 +240,11 @@ const CONTENT_SCRIPT = `
 
   function fixAll() {
     document.querySelectorAll(TEXT_TAGS).forEach(fixElement);
-    // Also fix chat message containers (user messages use div, not p)
-    var containers = '.interactive-request .value,.interactive-response .value,.interactive-item-container .value';
-    document.querySelectorAll(containers).forEach(function(el) {
-      if (el.getAttribute('dir') === 'rtl') return;
-      var text = el.textContent || '';
-      if (ARABIC_RE.test(text)) {
-        el.setAttribute('dir', 'rtl');
-        el.style.textAlign = 'right';
-      }
-    });
+    // Scan divs/spans ONLY inside chat panel (user messages use div, not p)
+    var chatArea = document.querySelector('.interactive-session');
+    if (chatArea) {
+      chatArea.querySelectorAll('div,span').forEach(fixElement);
+    }
   }
 
   // Fix now + retry at intervals to catch late-rendered content
