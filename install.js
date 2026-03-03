@@ -210,15 +210,13 @@ const CONTENT_SCRIPT = `
   if (window.__rtlFixApplied) return;
   window.__rtlFixApplied = true;
 
-  var ARABIC_RE = /[\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF]/;
+  var ARABIC_RE = new RegExp('[\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF]');
   var TEXT_TAGS = 'p,li,h1,h2,h3,h4,h5,h6,blockquote,summary,details,td,th';
 
   function fixElement(el) {
-    // Skip code blocks
     if (el.tagName === 'PRE' || el.tagName === 'CODE') return;
     if (el.closest && el.closest('pre')) return;
 
-    // Get text content (strip code children)
     var text = '';
     el.childNodes.forEach(function(n) {
       if (n.nodeType === 3) text += n.textContent;
@@ -228,7 +226,6 @@ const CONTENT_SCRIPT = `
     if (ARABIC_RE.test(text)) {
       el.setAttribute('dir', 'rtl');
       el.style.textAlign = 'right';
-      // If this is a list item, also fix the parent list
       if ((el.tagName === 'LI') && el.parentElement) {
         el.parentElement.setAttribute('dir', 'rtl');
       }
@@ -239,21 +236,37 @@ const CONTENT_SCRIPT = `
     document.querySelectorAll(TEXT_TAGS).forEach(fixElement);
   }
 
-  // Fix existing content
+  // Fix now + retry at intervals to catch late-rendered content
   fixAll();
+  setTimeout(fixAll, 100);
+  setTimeout(fixAll, 500);
+  setTimeout(fixAll, 1500);
+  setTimeout(fixAll, 3000);
 
-  // Watch for new content (chat messages appear dynamically)
+  // Watch for ANY DOM change (new nodes, text changes, attribute changes)
   var observer = new MutationObserver(function(mutations) {
+    var needsFix = false;
     mutations.forEach(function(m) {
-      m.addedNodes.forEach(function(node) {
-        if (node.nodeType === 1) {
-          if (node.matches && node.matches(TEXT_TAGS)) fixElement(node);
-          node.querySelectorAll && node.querySelectorAll(TEXT_TAGS).forEach(fixElement);
-        }
-      });
+      if (m.type === 'childList') {
+        m.addedNodes.forEach(function(node) {
+          if (node.nodeType === 1) {
+            if (node.matches && node.matches(TEXT_TAGS)) fixElement(node);
+            if (node.querySelectorAll) node.querySelectorAll(TEXT_TAGS).forEach(fixElement);
+            needsFix = true;
+          }
+        });
+      } else if (m.type === 'characterData' && m.target.parentElement) {
+        var parent = m.target.parentElement;
+        if (parent.matches && parent.matches(TEXT_TAGS)) fixElement(parent);
+        needsFix = true;
+      }
     });
+    // Also re-scan after a batch of mutations settles
+    if (needsFix) setTimeout(fixAll, 50);
   });
-  observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  observer.observe(document.body || document.documentElement, {
+    childList: true, subtree: true, characterData: true
+  });
 })();
 `;
 
