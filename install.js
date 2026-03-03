@@ -209,8 +209,12 @@ td[dir="rtl"], th[dir="rtl"] { text-align: right; }
   unicode-bidi: plaintext;
 }
 /* ALL webview content — auto-detect direction from text */
-/* Main window unaffected (has .monaco-workbench on body) */
 body:not(.monaco-workbench) *:not(pre):not(code) {
+  unicode-bidi: plaintext;
+}
+/* Main window chat area — auto-detect direction for user messages */
+.interactive-session *:not(pre):not(code):not(.monaco-editor):not(.monaco-editor *):not(button):not(input):not(textarea),
+.chat-widget *:not(pre):not(code):not(.monaco-editor):not(.monaco-editor *):not(button):not(input):not(textarea) {
   unicode-bidi: plaintext;
 }
 `;
