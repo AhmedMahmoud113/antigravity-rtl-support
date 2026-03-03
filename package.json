@@ -1,5 +1,5 @@
 {
-  "name": "antigravity-rtl-fix",
+  "name": "antigravity-rtl-support",
   "version": "1.0.0",
   "description": "Fix Arabic & Hebrew (RTL) text rendering in Google Antigravity's chat panel and Markdown Preview",
   "main": "install.js",
@@ -10,26 +10,31 @@
   },
   "keywords": [
     "antigravity",
+    "google-antigravity",
     "rtl",
+    "rtl-support",
     "arabic",
+    "arabic-text",
     "hebrew",
     "bidi",
     "bidirectional",
     "right-to-left",
+    "text-direction",
     "vscode",
     "electron",
-    "text-direction"
+    "chat-panel",
+    "markdown-preview"
   ],
   "author": "Ahmed Mahmoud",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AhmedMahmoud113/antigravity-rtl-fix.git"
+    "url": "https://github.com/AhmedMahmoud113/antigravity-rtl-support.git"
   },
   "bugs": {
-    "url": "https://github.com/AhmedMahmoud113/antigravity-rtl-fix/issues"
+    "url": "https://github.com/AhmedMahmoud113/antigravity-rtl-support/issues"
   },
-  "homepage": "https://github.com/AhmedMahmoud113/antigravity-rtl-fix#readme",
+  "homepage": "https://github.com/AhmedMahmoud113/antigravity-rtl-support#readme",
   "engines": {
     "node": ">=14.0.0"
   }

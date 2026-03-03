@@ -46,10 +46,10 @@ The CSS:
 
 ```bash
 # Clone the repo
-git clone https://github.com/AhmedMahmoud113/antigravity-rtl-fix.git
+git clone https://github.com/AhmedMahmoud113/antigravity-rtl-support.git
 
 # Run the installer
-cd antigravity-rtl-fix
+cd antigravity-rtl-support
 node install.js
 ```
 
