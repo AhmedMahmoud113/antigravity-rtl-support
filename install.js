@@ -202,6 +202,12 @@ ul[dir="rtl"], ol[dir="rtl"] { list-style-position: inside; }
 /* Tables stay LTR structure */
 table { direction: ltr; }
 td[dir="rtl"], th[dir="rtl"] { text-align: right; }
+/* Chat input — auto-detect direction based on what you type */
+.interactive-input-part .monaco-editor .view-lines,
+.interactive-input-part .lines-content,
+.interactive-input-editor .view-lines {
+  unicode-bidi: plaintext;
+}
 `;
 
 // Smart JS content script — detects Arabic text and sets dir="rtl"
