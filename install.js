@@ -208,6 +208,12 @@ td[dir="rtl"], th[dir="rtl"] { text-align: right; }
 .interactive-input-editor .view-lines {
   unicode-bidi: plaintext;
 }
+/* User's sent messages — auto-detect direction from text content */
+.interactive-session .interactive-request,
+.interactive-session .interactive-request *:not(pre):not(code):not(.monaco-editor):not(.monaco-editor *) {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
 `;
 
 // Smart JS content script — detects Arabic text and sets dir="rtl"
