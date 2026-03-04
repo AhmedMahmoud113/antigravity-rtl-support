@@ -202,12 +202,7 @@ ul[dir="rtl"], ol[dir="rtl"] { list-style-position: inside; }
 /* Tables stay LTR structure */
 table { direction: ltr; }
 td[dir="rtl"], th[dir="rtl"] { text-align: right; }
-/* Chat input — auto-detect direction based on what you type */
-.interactive-input-part .monaco-editor .view-lines,
-.interactive-input-part .lines-content,
-.interactive-input-editor .view-lines {
-  unicode-bidi: plaintext;
-}
+
 /* ALL webview content — auto-detect direction from text */
 body:not(.monaco-workbench) *:not(pre):not(code) {
   unicode-bidi: plaintext;
@@ -248,9 +243,7 @@ const CONTENT_SCRIPT = `
   function applyRtl(el) {
     el.setAttribute('dir', 'rtl');
     el.style.textAlign = 'right';
-    if ((el.tagName === 'LI') && el.parentElement) {
-      el.parentElement.setAttribute('dir', 'rtl');
-    }
+    // Do NOT propagate to parent ol/ul — keeps English siblings LTR
   }
 
   function fixElement(el) {
