@@ -243,7 +243,6 @@ const CONTENT_SCRIPT = `
   function applyRtl(el) {
     el.setAttribute('dir', 'rtl');
     el.style.textAlign = 'right';
-    // Do NOT propagate to parent ol/ul — keeps English siblings LTR
   }
 
   function fixElement(el) {
@@ -259,12 +258,26 @@ const CONTENT_SCRIPT = `
     if (el.tagName === 'PRE' || el.tagName === 'CODE') return;
     if (el.closest && el.closest('pre')) return;
     if (el.getAttribute('dir') === 'rtl') return;
-    // Only check direct text nodes — not nested element text
     if (ARABIC_RE.test(getDirectText(el))) applyRtl(el);
+  }
+
+  // After fixing individual items, check lists:
+  // if majority of items are RTL, set entire list RTL for visual consistency
+  function fixLists() {
+    document.querySelectorAll('ul,ol').forEach(function(list) {
+      var items = list.querySelectorAll(':scope > li');
+      if (items.length === 0) return;
+      var rtlCount = 0;
+      items.forEach(function(li) { if (li.getAttribute('dir') === 'rtl') rtlCount++; });
+      if (rtlCount > items.length / 2) {
+        list.setAttribute('dir', 'rtl');
+      }
+    });
   }
 
   function fixAll() {
     document.querySelectorAll(TEXT_TAGS).forEach(fixElement);
+    fixLists();
     // Scan divs/spans ONLY inside chat panel, with strict direct-text check
     var chatArea = document.querySelector('.interactive-session');
     if (chatArea) {
